@@ -1,23 +1,27 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light p-4">
-    <div class="container">
-        <h3>Dashboard Admin</h3>
-        <p>Selamat datang, <strong>{{ Auth::guard('admin')->user()?->nama ?? 'Admin' }}</strong>!</p>
+@extends('layouts.admin')
 
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
+@section('title', 'Dashboard')
+@section('page-title', 'Dashboard')
 
-        <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-danger">Logout</button>
-        </form>
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Dashboard</li>
+@endsection
+
+@section('content')
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-1">
+                    <i class="bi bi-hand-wave text-warning me-2"></i>
+                    Selamat datang, {{ Auth::guard('admin')->user()?->nama ?? 'Admin' }}!
+                </h5>
+                <p class="text-muted mb-0" style="font-size:0.9rem;">
+                    Ini adalah panel administrasi Sistem Pakar Diagnosis Penyakit Mata.
+                    Dashboard lengkap akan tersedia setelah semua modul selesai.
+                </p>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
