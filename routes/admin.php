@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PenyakitController;
 use App\Http\Controllers\Admin\GejalaController;
+use App\Http\Controllers\Admin\AturanController;
 
 // Route publik admin
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -22,8 +23,10 @@ Route::middleware('admin.auth')->group(function () {
     // Gejala
     Route::resource('gejala', GejalaController::class);
 
+    // Aturan CF
+    Route::resource('aturan', AturanController::class)->except(['show']);
+
     // Placeholder sesi berikutnya
-    Route::get('/aturan',   fn() => 'coming soon')->name('aturan.index');
     Route::get('/diagnosa', fn() => 'coming soon')->name('diagnosa.index');
     Route::get('/admin',    fn() => 'coming soon')->name('admin.index');
 
