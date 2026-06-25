@@ -3,20 +3,18 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\CertaintyFactorService;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        //
+        // Daftarkan CertaintyFactorService sebagai singleton
+        $this->app->singleton(CertaintyFactorService::class, function () {
+            return new CertaintyFactorService();
+        });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         //

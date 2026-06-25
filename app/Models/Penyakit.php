@@ -20,5 +20,8 @@ class Penyakit extends Model
         return $this->hasMany(Aturan::class);
     }
 
-    // hasilDiagnosa() akan ditambahkan kembali di Sesi 9
+    public function hasilDiagnosa()
+    {
+        return $this->hasMany(HasilDiagnosa::class);
+    }
 }
