@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PenyakitController;
 use App\Http\Controllers\Admin\GejalaController;
 use App\Http\Controllers\Admin\AturanController;
 use App\Http\Controllers\Admin\DiagnosaController;
+use App\Http\Controllers\Admin\AdminController;
 
 // Route publik admin
 Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
@@ -29,13 +30,14 @@ Route::middleware('admin.auth')->group(function () {
 
     // Diagnosa
     Route::prefix('diagnosa')->name('diagnosa.')->group(function () {
-        Route::get('/',            [DiagnosaController::class, 'index'])->name('index');
-        Route::get('/export',      [DiagnosaController::class, 'export'])->name('export');
-        Route::get('/{id}',        [DiagnosaController::class, 'show'])->name('show');
-        Route::delete('/{id}',     [DiagnosaController::class, 'destroy'])->name('destroy');
+        Route::get('/',        [DiagnosaController::class, 'index'])->name('index');
+        Route::get('/export',  [DiagnosaController::class, 'export'])->name('export');
+        Route::get('/{id}',    [DiagnosaController::class, 'show'])->name('show');
+        Route::delete('/{id}', [DiagnosaController::class, 'destroy'])->name('destroy');
     });
 
-    // Placeholder sesi berikutnya
-    Route::get('/admin', fn() => 'coming soon')->name('admin.index');
+    // Manajemen Admin
+    Route::resource('admin', AdminController::class)
+        ->except(['show']);
 
 });
