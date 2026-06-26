@@ -161,6 +161,8 @@
         <div class="col-md-6">
             <div class="card-user bg-white p-4">
                 <div class="d-flex align-items-start gap-3">
+
+                    {{-- Ikon Kode --}}
                     <div style="
                         width:44px;height:44px;border-radius:12px;flex-shrink:0;
                         background:rgba(46,134,171,0.1);
@@ -169,17 +171,70 @@
                     ">
                         {{ $p->kode }}
                     </div>
-                    <div class="flex-grow-1">
-                        <div class="d-flex align-items-center justify-content-between mb-1">
+
+                    <div class="flex-grow-1" x-data="{ buka: false }">
+
+                        {{-- Header: Nama + Badge + Tombol Panah --}}
+                        <div class="d-flex align-items-center justify-content-between mb-2">
                             <h6 class="fw-bold mb-0">{{ $p->nama }}</h6>
-                            <span class="badge bg-primary-subtle text-primary"
-                                  style="font-size:0.72rem;">
-                                {{ $p->aturan_count }} gejala
-                            </span>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge bg-primary-subtle text-primary"
+                                      style="font-size:0.72rem;">
+                                    {{ $p->aturan_count }} gejala
+                                </span>
+                                {{-- Tombol Panah --}}
+                                <button
+                                    type="button"
+                                    @click="buka = !buka"
+                                    class="btn btn-sm btn-outline-secondary p-1"
+                                    style="width:28px;height:28px;border-radius:8px;
+                                           display:flex;align-items:center;
+                                           justify-content:center;flex-shrink:0;"
+                                    :title="buka ? 'Tutup' : 'Baca selengkapnya'">
+                                    <i class="bi"
+                                       :class="buka ? 'bi-chevron-up' : 'bi-chevron-down'"
+                                       style="font-size:0.75rem;"></i>
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-muted mb-0" style="font-size:0.85rem;line-height:1.6;">
-                            {{ Str::limit($p->deskripsi, 120) }}
+
+                        {{-- Deskripsi Singkat (selalu tampil) --}}
+                        <p class="text-muted mb-0"
+                           style="font-size:0.85rem;line-height:1.6;"
+                           x-show="!buka">
+                            {{ Str::limit($p->deskripsi, 100) }}
                         </p>
+
+                        {{-- Deskripsi Lengkap (tampil saat panah diklik) --}}
+                        <div x-show="buka"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100"
+                             x-transition:leave-end="opacity-0">
+
+                            <p class="text-muted mb-2"
+                               style="font-size:0.85rem;line-height:1.6;">
+                                {{ $p->deskripsi }}
+                            </p>
+
+                            {{-- Solusi --}}
+                            <div class="p-2 rounded-2 mt-2"
+                                 style="background:rgba(87,204,153,0.08);
+                                        border-left:3px solid #57CC99;">
+                                <p class="fw-semibold mb-1"
+                                   style="font-size:0.78rem;color:#57CC99;">
+                                    <i class="bi bi-heart-pulse me-1"></i>
+                                    Rekomendasi Penanganan
+                                </p>
+                                <p class="text-muted mb-0"
+                                   style="font-size:0.82rem;line-height:1.6;">
+                                    {{ $p->solusi }}
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -195,7 +250,9 @@
         Referensi Penelitian
     </h4>
     <div class="card-user bg-white p-4">
-        <div class="d-flex gap-3 mb-3">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+
+            {{-- Ikon --}}
             <div style="
                 width:44px;height:44px;border-radius:12px;flex-shrink:0;
                 background:rgba(111,66,193,0.1);
@@ -204,54 +261,47 @@
             ">
                 <i class="bi bi-file-earmark-text"></i>
             </div>
-            <div class="flex-grow-1">
-                <h6 class="fw-bold mb-1">
-                    Sistem Pakar untuk Diagnosis Penyakit Mata dengan Certainty Factor
-                    dan Forward Chaining
+
+            {{-- Teks Jurnal --}}
+            <div class="flex-grow-1" style="min-width:200px;">
+                <h6 class="fw-bold mb-1" style="font-size:0.9rem;">
+                    Sistem Pakar untuk Diagnosis Penyakit Mata dengan
+                    Certainty Factor dan Forward Chaining
                 </h6>
-                <p class="text-muted mb-1" style="font-size:0.85rem;">
+                <p class="text-muted mb-0" style="font-size:0.82rem;line-height:1.5;">
                     <i class="bi bi-person me-1"></i>
-                    Joni Warta, Hendarman Lubis
-                </p>
-                <p class="text-muted mb-1" style="font-size:0.85rem;">
-                    <i class="bi bi-journal me-1"></i>
-                    <em>Journal of Information System, Informatics and Computing</em>
-                    — Vol.9 No.2 (December 2025)
-                </p>
-                <p class="text-muted mb-3" style="font-size:0.82rem;">
-                    <i class="bi bi-link-45deg me-1"></i>
+                    Joni Warta, Hendarman Lubis &nbsp;·&nbsp;
+                    <em>JISICOM</em> Vol.9 No.2 (2025) &nbsp;·&nbsp;
                     DOI: 10.52362/jisicom.v9i2.2218
                 </p>
+            </div>
 
-                {{-- Tombol Aksi Jurnal --}}
-                <div class="d-flex flex-wrap gap-2">
+            {{-- Tombol sejajar di kanan --}}
+            <div class="d-flex gap-2 flex-shrink-0 flex-wrap">
 
-                    {{-- Download PDF Jurnal --}}
-                    @if($pdfJurnalAda)
-                    <a href="{{ asset('storage/jurnal/jurnal-sistem-pakar-mata.pdf') }}"
-                       target="_blank"
-                       class="btn btn-sm btn-utama"
-                       download="Jurnal-Sistem-Pakar-Mata-CF-ForwardChaining.pdf">
-                        <i class="bi bi-file-pdf me-1"></i>Download PDF Jurnal
-                    </a>
-                    @else
-                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                        <i class="bi bi-file-pdf me-1"></i>PDF Belum Tersedia
-                    </button>
-                    @endif
+                @if($pdfJurnalAda)
+                <a href="{{ asset('storage/jurnal/jurnal-sistem-pakar-mata.pdf') }}"
+                   target="_blank"
+                   download="Jurnal-Sistem-Pakar-Mata.pdf"
+                   class="btn btn-sm btn-utama">
+                    <i class="bi bi-file-pdf me-1"></i>Download PDF
+                </a>
+                @else
+                <button class="btn btn-sm btn-outline-secondary" disabled>
+                    <i class="bi bi-file-pdf me-1"></i>PDF
+                </button>
+                @endif
 
-                    {{-- Link ke Website Jurnal --}}
-                    @if($urlWebsiteJurnal !== '#')
-                    <a href="{{ $urlWebsiteJurnal }}"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="btn btn-sm btn-outline-primary"
-                       style="border-radius:8px;">
-                        <i class="bi bi-box-arrow-up-right me-1"></i>Buka Website Jurnal
-                    </a>
-                    @endif
+                @if($urlWebsiteJurnal !== '#')
+                <a href="{{ $urlWebsiteJurnal }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-sm btn-outline-primary"
+                   style="border-radius:8px;">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>Website Jurnal
+                </a>
+                @endif
 
-                </div>
             </div>
         </div>
     </div>
