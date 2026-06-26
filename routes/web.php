@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\BerandaController;
 use App\Http\Controllers\User\DiagnosaController;
 use App\Http\Controllers\User\HasilController;
+use App\Http\Controllers\User\RiwayatController;
 
 // Beranda
 Route::get('/', [BerandaController::class, 'index'])->name('beranda');
@@ -19,10 +20,29 @@ Route::prefix('diagnosa')->name('user.diagnosa.')->group(function () {
 
 // Hasil
 Route::prefix('hasil')->name('user.hasil.')->group(function () {
-    Route::get('/',           [HasilController::class, 'show'])->name('show');
-    Route::get('/{id}/pdf',   [HasilController::class, 'downloadPdf'])->name('pdf');
+    Route::get('/',         [HasilController::class, 'show'])->name('show');
+    Route::get('/{id}/pdf', [HasilController::class, 'downloadPdf'])->name('pdf');
+});
+
+// Riwayat
+Route::prefix('riwayat')->name('user.riwayat.')->group(function () {
+    Route::get('/',            [RiwayatController::class, 'index'])->name('index');
+    Route::post('/cek-hp',     [RiwayatController::class, 'cekHp'])->name('cek-hp');
+
+    // Route GET untuk form PIN — pisah dari POST verifikasi
+    Route::get('/pin',         [RiwayatController::class, 'formPin'])->name('pin');
+    Route::post('/verifikasi', [RiwayatController::class, 'verifikasiPin'])->name('verifikasi');
+
+    Route::get('/daftar',      [RiwayatController::class, 'daftar'])->name('daftar');
+
+    // Statis sebelum dinamis
+    Route::get('/reset-pin',   [RiwayatController::class, 'formResetPin'])->name('reset-pin');
+    Route::post('/reset-pin',  [RiwayatController::class, 'resetPin'])->name('reset-pin.proses');
+
+    // Dinamis di paling bawah
+    Route::get('/{id}',        [RiwayatController::class, 'detail'])->name('detail');
+    Route::get('/{id}/pdf',    [RiwayatController::class, 'downloadPdf'])->name('pdf');
 });
 
 // Placeholder
-Route::get('/riwayat', fn() => 'coming soon')->name('user.riwayat.index');
 Route::get('/tentang', fn() => 'coming soon')->name('user.tentang');
