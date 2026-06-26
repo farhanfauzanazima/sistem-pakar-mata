@@ -12,6 +12,7 @@ class Admin extends Authenticatable
         'nama',
         'email',
         'password',
+        'is_super_admin',
     ];
 
     protected $hidden = [
@@ -21,7 +22,13 @@ class Admin extends Authenticatable
     protected function casts(): array
     {
         return [
-            'password' => 'hashed',
+            'password'       => 'hashed',
+            'is_super_admin' => 'boolean',
         ];
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return (bool) $this->is_super_admin;
     }
 }

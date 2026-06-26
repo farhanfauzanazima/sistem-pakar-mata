@@ -12,7 +12,10 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = Admin::orderBy('created_at', 'desc')->get();
+        $admins = Admin::orderBy('is_super_admin', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
         return view('admin.admin.index', compact('admins'));
     }
 
@@ -38,9 +41,10 @@ class AdminController extends Controller
         ]);
 
         Admin::create([
-            'nama'     => $request->nama,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
+            'nama'           => $request->nama,
+            'email'          => $request->email,
+            'password'       => Hash::make($request->password),
+            'is_super_admin' => false, // Admin baru tidak bisa jadi super admin
         ]);
 
         return redirect()->route('admin.admin.index')
@@ -69,7 +73,6 @@ class AdminController extends Controller
             'email' => $request->email,
         ];
 
-        // Update password hanya jika diisi
         if ($request->filled('password')) {
             $request->validate([
                 'password' => 'min:6|confirmed',
@@ -88,16 +91,16 @@ class AdminController extends Controller
 
     public function destroy(Admin $admin)
     {
+        // Tidak boleh hapus super admin
+        if ($admin->isSuperAdmin()) {
+            return redirect()->route('admin.admin.index')
+                ->with('error', 'Super Admin tidak dapat dihapus.');
+        }
+
         // Tidak boleh hapus diri sendiri
         if ($admin->id === Auth::guard('admin')->id()) {
             return redirect()->route('admin.admin.index')
                 ->with('error', 'Tidak dapat menghapus akun yang sedang digunakan.');
-        }
-
-        // Minimal harus ada 1 admin
-        if (Admin::count() <= 1) {
-            return redirect()->route('admin.admin.index')
-                ->with('error', 'Tidak dapat menghapus admin terakhir.');
         }
 
         $admin->delete();

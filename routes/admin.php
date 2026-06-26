@@ -36,8 +36,8 @@ Route::middleware('admin.auth')->group(function () {
         Route::delete('/{id}', [DiagnosaController::class, 'destroy'])->name('destroy');
     });
 
-    // Manajemen Admin
-    Route::resource('admin', AdminController::class)
+    // Manajemen Admin — hanya Super Admin
+    Route::middleware('super.admin')
+        ->resource('admin', AdminController::class)
         ->except(['show']);
-
 });

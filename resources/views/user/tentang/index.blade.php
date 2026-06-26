@@ -195,7 +195,7 @@
         Referensi Penelitian
     </h4>
     <div class="card-user bg-white p-4">
-        <div class="d-flex gap-3">
+        <div class="d-flex gap-3 mb-3">
             <div style="
                 width:44px;height:44px;border-radius:12px;flex-shrink:0;
                 background:rgba(111,66,193,0.1);
@@ -204,18 +204,54 @@
             ">
                 <i class="bi bi-file-earmark-text"></i>
             </div>
-            <div>
+            <div class="flex-grow-1">
                 <h6 class="fw-bold mb-1">
                     Sistem Pakar untuk Diagnosis Penyakit Mata dengan Certainty Factor
                     dan Forward Chaining
                 </h6>
                 <p class="text-muted mb-1" style="font-size:0.85rem;">
-                    Joni Warta, Hendarman Lubis —
+                    <i class="bi bi-person me-1"></i>
+                    Joni Warta, Hendarman Lubis
+                </p>
+                <p class="text-muted mb-1" style="font-size:0.85rem;">
+                    <i class="bi bi-journal me-1"></i>
                     <em>Journal of Information System, Informatics and Computing</em>
+                    — Vol.9 No.2 (December 2025)
                 </p>
-                <p class="text-muted mb-0" style="font-size:0.82rem;">
-                    Vol.9 No.2 (December 2025) · DOI: 10.52362/jisicom.v9i2.2218
+                <p class="text-muted mb-3" style="font-size:0.82rem;">
+                    <i class="bi bi-link-45deg me-1"></i>
+                    DOI: 10.52362/jisicom.v9i2.2218
                 </p>
+
+                {{-- Tombol Aksi Jurnal --}}
+                <div class="d-flex flex-wrap gap-2">
+
+                    {{-- Download PDF Jurnal --}}
+                    @if($pdfJurnalAda)
+                    <a href="{{ asset('storage/jurnal/jurnal-sistem-pakar-mata.pdf') }}"
+                       target="_blank"
+                       class="btn btn-sm btn-utama"
+                       download="Jurnal-Sistem-Pakar-Mata-CF-ForwardChaining.pdf">
+                        <i class="bi bi-file-pdf me-1"></i>Download PDF Jurnal
+                    </a>
+                    @else
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        <i class="bi bi-file-pdf me-1"></i>PDF Belum Tersedia
+                    </button>
+                    @endif
+
+                    {{-- Link ke Website Jurnal --}}
+                    @if($urlWebsiteJurnal !== '#')
+                    <a href="{{ $urlWebsiteJurnal }}"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-sm btn-outline-primary"
+                       style="border-radius:8px;">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>Buka Website Jurnal
+                    </a>
+                    @endif
+
+                </div>
             </div>
         </div>
     </div>
