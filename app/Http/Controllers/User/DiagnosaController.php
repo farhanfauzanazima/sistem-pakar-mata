@@ -131,7 +131,6 @@ class DiagnosaController extends Controller
             'gejala.min'      => 'Pilih minimal satu gejala.',
         ]);
 
-        // Format input: [gejala_id => frekuensi]
         $inputGejala = $request->input('gejala', []);
 
         // Pastikan ada yang bukan "tidak_pernah"
@@ -156,9 +155,7 @@ class DiagnosaController extends Controller
             );
         }
 
-        $pasienId = session('pasien_id');
-
-        // Ambil hasil teratas (CF tertinggi)
+        $pasienId     = session('pasien_id');
         $hasilTeratas = reset($hasilDiagnosa);
 
         // Simpan hasil diagnosa ke database
@@ -169,17 +166,23 @@ class DiagnosaController extends Controller
             'cf_persen'   => $hasilTeratas['cf_persen'],
         ]);
 
-        // Simpan detail gejala yang dipilih
-        foreach ($hasilTeratas['detail'] as $detail) {
-            DetailDiagnosa::create([
+        // ── PERBAIKAN: Simpan SEMUA gejala aktif yang dipilih user ──
+        $cfUserMap = \App\Services\CertaintyFactorService::CF_USER;
+
+        foreach ($inputGejala as $gejalaId => $frekuensi) {
+            // Lewati yang tidak pernah
+            if ($frekuensi === 'tidak_pernah' || $frekuensi === null) {
+                continue;
+            }
+
+            \App\Models\DetailDiagnosa::create([
                 'hasil_diagnosa_id' => $hasil->id,
-                'gejala_id'         => $detail['gejala_id'],
-                'frekuensi'         => $detail['frekuensi'],
-                'cf_user'           => $detail['cf_user'],
+                'gejala_id'         => (int) $gejalaId,
+                'frekuensi'         => $frekuensi,
+                'cf_user'           => $cfUserMap[$frekuensi] ?? 0,
             ]);
         }
 
-        // Simpan hasil_diagnosa_id ke session untuk halaman hasil
         session(['hasil_diagnosa_id' => $hasil->id]);
 
         return redirect()->route('user.hasil.show');

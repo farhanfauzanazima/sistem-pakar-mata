@@ -37,7 +37,17 @@ Route::middleware('admin.auth')->group(function () {
     });
 
     // Manajemen Admin — hanya Super Admin
+    // Gunakan prefix 'kelola-admin' agar tidak bentrok dengan nama route
     Route::middleware('super.admin')
-        ->resource('admin', AdminController::class)
-        ->except(['show']);
+        ->prefix('kelola-admin')
+        ->name('admin.')
+        ->group(function () {
+            Route::get('/',             [AdminController::class, 'index'])->name('index');
+            Route::get('/tambah',       [AdminController::class, 'create'])->name('create');
+            Route::post('/',            [AdminController::class, 'store'])->name('store');
+            Route::get('/{admin}/edit', [AdminController::class, 'edit'])->name('edit');
+            Route::put('/{admin}',      [AdminController::class, 'update'])->name('update');
+            Route::delete('/{admin}',   [AdminController::class, 'destroy'])->name('destroy');
+        });
+
 });
